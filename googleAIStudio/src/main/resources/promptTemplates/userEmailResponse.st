@@ -1,5 +1,5 @@
-Customer Name: <customerName>
-Customer Request: <customerRequest>
+Customer Name: {customerName}
+Customer Request: {customerRequest}
 
 Generate a response using STRICT format below.
 

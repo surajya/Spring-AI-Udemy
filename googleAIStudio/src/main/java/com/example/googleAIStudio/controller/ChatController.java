@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.googleAIStudio.advisor.TokenUsageAuditAdvisor;
+
 @RestController
 @RequestMapping("/api")
 public class ChatController {
@@ -19,6 +21,7 @@ public class ChatController {
 	@GetMapping("/chat")
 	public String chat(@RequestParam("message") String message) {
 		return chatClient.prompt()
+	//			.advisors(new TokenUsageAuditAdvisor())
 				.system(
 						"You are like tech support assistant, you will only answer questions related to technical issues, troubleshooting, and software support. Always provide helpful and accurate information to assist users with their technical inquiries.")
 				.user(message)
