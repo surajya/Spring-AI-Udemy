@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
-public class PromptStuffingController {
+public class PromptStuffingLeavesController {
 
 	private final ChatClient chatClient;
 
-	@Value("classpath:/promptTemplates/leaveRStuffing.st")
+	@Value("classpath:/promptTemplates/leaveStuffing.st")
 	private Resource promptStuffing;
 
-	public PromptStuffingController(ChatClient chatClient) {
+	public PromptStuffingLeavesController(ChatClient chatClient) {
 		this.chatClient = chatClient;
 	}
 
@@ -26,7 +26,7 @@ public class PromptStuffingController {
 
 		return chatClient.prompt()
 				.system(promptStuffing)
-				.user(message)
+				.user(t -> t.text(message).param("message", message))
 				.call().content();
 	}
 }
