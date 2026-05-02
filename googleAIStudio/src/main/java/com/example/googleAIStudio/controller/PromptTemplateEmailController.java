@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
-public class PromptTemplateController {
+public class PromptTemplateEmailController {
 
 	private final ChatClient chatClient;
 
 	@Value("classpath:/promptTemplates/userEmailResponse.st")
 	private Resource promptTemplate;
 
-	public PromptTemplateController(ChatClient chatClient) {
+	public PromptTemplateEmailController(ChatClient chatClient) {
 		this.chatClient = chatClient;
 	}
 
