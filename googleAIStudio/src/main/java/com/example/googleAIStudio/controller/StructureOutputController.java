@@ -1,6 +1,7 @@
 package com.example.googleAIStudio.controller;
 
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +17,7 @@ public class StructureOutputController {
 	private final ChatClient chatClient;
 
 	public StructureOutputController(ChatClient.Builder chatClientBuilder) {
-		this.chatClient = chatClientBuilder.build();
+		this.chatClient = chatClientBuilder.defaultAdvisors(new SimpleLoggerAdvisor()).build();
 	}
 
 	@GetMapping("/chat-structure")
