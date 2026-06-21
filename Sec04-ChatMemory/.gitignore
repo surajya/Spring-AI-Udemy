@@ -9,6 +9,7 @@ target/
 mvnw
 mvnw.cmd
 Eclipse-SURYA-Style-v1.xml
+AGENTS.md
 
 ### STS ###
 .apt_generated
