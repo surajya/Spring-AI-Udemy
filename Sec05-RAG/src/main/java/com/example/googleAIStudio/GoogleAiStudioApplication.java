@@ -10,5 +10,4 @@ public class GoogleAiStudioApplication {
 		SpringApplication.run(GoogleAiStudioApplication.class, args);
 		System.out.println("Google AI Studio Application is running.....");
 	}
-
 }
