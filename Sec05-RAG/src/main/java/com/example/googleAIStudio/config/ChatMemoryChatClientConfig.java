@@ -2,6 +2,7 @@ package com.example.googleAIStudio.config;
 
 import java.util.List;
 
+import com.example.googleAIStudio.advisor.TokenUsageAuditAdvisor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
@@ -24,6 +25,7 @@ public class ChatMemoryChatClientConfig {
 	public ChatClient chatClient(ChatClient.Builder builder, ChatMemory chatMemory) {
 		Advisor simpleLoggerAdvisor = SimpleLoggerAdvisor.builder().build();
 		Advisor messageChatMemoryAdvisor = MessageChatMemoryAdvisor.builder(chatMemory).build();
-		return builder.defaultAdvisors(List.of(simpleLoggerAdvisor, messageChatMemoryAdvisor)).build();
+		Advisor tokenUsageAuditAdvisor =new TokenUsageAuditAdvisor();
+		return builder.defaultAdvisors(List.of(simpleLoggerAdvisor, messageChatMemoryAdvisor, tokenUsageAuditAdvisor)).build();
 	}
 }

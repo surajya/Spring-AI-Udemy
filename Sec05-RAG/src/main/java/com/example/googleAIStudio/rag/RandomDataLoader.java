@@ -3,17 +3,21 @@ package com.example.googleAIStudio.rag;
 import jakarta.annotation.PostConstruct;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.vectorstore.VectorStore;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
+//@Component
 public class RandomDataLoader {
 
     private final VectorStore vectorStore;
 
-    public RandomDataLoader(VectorStore vectorStore) {
+    private final JdbcTemplate jdbcTemplate;
+
+    public RandomDataLoader(VectorStore vectorStore, JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
         this.vectorStore = vectorStore;
     }
 
@@ -75,7 +79,15 @@ public class RandomDataLoader {
                 "CRM systems manage customer relationships and sales pipelines.",
                 "SWOT analysis identifies strengths, weaknesses, opportunities, and threats."
         );
+        Integer count = jdbcTemplate.queryForObject(
+                "SELECT COUNT(*) FROM vector_store", Integer.class);
+        if (count != null && count > 0) {
+            System.out.println("Vector store already populated, skipping ingestion");
+            return;
+        }else{
+        // your existing document loading + vectorStore.add(documents) here
+            System.out.println("Vector store empty, add document into vector_store");
         List<Document> documents = sentences.stream().map(Document::new).collect(Collectors.toList());
-        vectorStore.add(documents);
+        vectorStore.add(documents);}
     }
 }
