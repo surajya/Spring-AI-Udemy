@@ -3,6 +3,8 @@ package com.example.googleAIStudio.rag;
 import jakarta.annotation.PostConstruct;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.reader.tika.TikaDocumentReader;
+import org.springframework.ai.transformer.splitter.TextSplitter;
+import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -39,7 +41,8 @@ public class DocumentLoader {
         }else{
         // your existing document loading + vectorStore.add(documents) here
             System.out.println("Vector store empty, add document into vector_store");
-        //List<Document> documents = sentences.stream().map(Document::new).collect(Collectors.toList());
-        vectorStore.add(documents);}
+            TextSplitter textSplitter = TokenTextSplitter.builder().withChunkSize(100).withMaxNumChunks(400).build();
+            vectorStore.add(textSplitter.split(documents));
+        }
     }
 }
