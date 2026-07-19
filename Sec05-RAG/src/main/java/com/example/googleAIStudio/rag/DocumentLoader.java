@@ -41,7 +41,7 @@ public class DocumentLoader {
         }else{
         // your existing document loading + vectorStore.add(documents) here
             System.out.println("Vector store empty, add document into vector_store");
-            TextSplitter textSplitter = TokenTextSplitter.builder().withChunkSize(100).withMaxNumChunks(400).build();
+            TextSplitter textSplitter = TokenTextSplitter.builder().withChunkSize(200).withMaxNumChunks(400).build();
             vectorStore.add(textSplitter.split(documents));
         }
     }

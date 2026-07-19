@@ -3,6 +3,7 @@ package com.example.googleAIStudio.config;
 import java.util.List;
 
 import com.example.googleAIStudio.advisor.TokenUsageAuditAdvisor;
+import com.example.googleAIStudio.rag.PIIMaskingDocumentPostProcessor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
@@ -37,7 +38,8 @@ public class ChatMemoryChatClientConfig {
 	public RetrievalAugmentationAdvisor retrievalAugmentationAdvisor(VectorStore vectorStore, ChatClient.Builder builder){
 		return RetrievalAugmentationAdvisor.builder()
 				.queryTransformers(TranslationQueryTransformer.builder().chatClientBuilder(builder).targetLanguage("english").build())
-				.documentRetriever(VectorStoreDocumentRetriever.builder().vectorStore(vectorStore).topK(3).similarityThreshold(0.5).build()
-		).build();
+				.documentRetriever(VectorStoreDocumentRetriever.builder().vectorStore(vectorStore).topK(3).similarityThreshold(0.5).build())
+				.documentPostProcessors(PIIMaskingDocumentPostProcessor.builder())
+				.build();
 	}
 }
