@@ -2,6 +2,7 @@ package com.example.googleAIStudio.config;
 
 import com.example.googleAIStudio.advisor.TokenUsageAuditAdvisor;
 import com.example.googleAIStudio.rag.WebSearchDocumentRetriever;
+import org.springframework.ai.chat.cache.semantic.SemanticCacheAdvisor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
@@ -15,11 +16,13 @@ import org.springframework.web.client.RestClient;
 import java.util.List;
 
 @Configuration
-public class WebSearchRAGChatClientConfig {
+public
+class WebSearchRAGChatClientConfig {
 
     @Bean("webSearchRAGChatClient")
-    public ChatClient chatClient(ChatClient.Builder chatClientBuilder,
-                                 ChatMemory chatMemory, RestClient.Builder restClientBuilder) {
+    public
+    ChatClient chatClient(ChatClient.Builder chatClientBuilder,
+                          ChatMemory chatMemory, RestClient.Builder restClientBuilder, SemanticCacheAdvisor semanticCacheAdvisor) {
         Advisor loggerAdvisor = new SimpleLoggerAdvisor();
         Advisor tokenUsageAdvisor = new TokenUsageAuditAdvisor();
         Advisor memoryAdvisor = MessageChatMemoryAdvisor.builder(chatMemory).build();
@@ -28,7 +31,7 @@ public class WebSearchRAGChatClientConfig {
                         .restClientBuilder(restClientBuilder).maxResults(5).build())
                 .build();
         return chatClientBuilder
-                .defaultAdvisors(List.of(loggerAdvisor, memoryAdvisor, tokenUsageAdvisor,
+                .defaultAdvisors(List.of(semanticCacheAdvisor, loggerAdvisor, memoryAdvisor, tokenUsageAdvisor,
                         webSearchRAGAdvisor))
                 .build();
     }

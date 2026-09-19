@@ -11,10 +11,12 @@ import org.springframework.core.Ordered;
 import redis.clients.jedis.RedisClient;
 
 @Configuration
-public class SemanticCacheConfig {
+public
+class SemanticCacheConfig {
 
     @Bean
-    public RedisClient getRedisClient(
+    public
+    RedisClient getRedisClient(
             @Value("${spring.data.redis.host:localhost}")
             String host,
             @Value("${spring.data.redis.port:6379}")
@@ -24,11 +26,12 @@ public class SemanticCacheConfig {
     }
 
     @Bean
-    public SemanticCache getSemanticCache(RedisClient redisClient, EmbeddingModel embeddingModel) {
+    public
+    SemanticCache getSemanticCache(RedisClient redisClient, EmbeddingModel embeddingModel) {
         return DefaultSemanticCache.builder()
                 .jedisClient(redisClient)
                 .embeddingModel(embeddingModel)
-                .similarityThreshold(0.8)
+                .similarityThreshold(0.9)
                 .indexName("eazybytes-semantic-cache")
                 .prefix("cache:")
                 .build();
@@ -36,7 +39,8 @@ public class SemanticCacheConfig {
 
     //write code for create bean of semanticCacheAdvisor
     @Bean
-    public SemanticCacheAdvisor getSemanticCacheAdvisor(SemanticCache semanticCache) {
+    public
+    SemanticCacheAdvisor getSemanticCacheAdvisor(SemanticCache semanticCache) {
         return SemanticCacheAdvisor.builder()
                 .cache(semanticCache)
                 .order(Ordered.HIGHEST_PRECEDENCE)
