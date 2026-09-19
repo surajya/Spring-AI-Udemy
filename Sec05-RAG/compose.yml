@@ -1,6 +1,10 @@
 services:
-  redis:
-    image: redis:latest
-    container_name: redis-rag
+  postgres:
+    image: pgvector/pgvector:pg17
+    restart: on-failure
     ports:
-      - "6379:6379"
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: vector_db
