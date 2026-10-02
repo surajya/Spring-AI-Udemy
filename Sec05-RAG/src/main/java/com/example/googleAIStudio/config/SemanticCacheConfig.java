@@ -41,8 +41,7 @@ class SemanticCacheConfig {
 
     //create bean of vectorStore
     @Bean("cacheVectorStrore")
-    public
-    VectorStore cacheVectorStore(JdbcTemplate jdbcTemplate, EmbeddingModel embeddingModel) {
+    public VectorStore cacheVectorStore(JdbcTemplate jdbcTemplate, EmbeddingModel embeddingModel) {
         return PgVectorStore.builder(jdbcTemplate, embeddingModel)
                 .schemaName("semantic_cache")
                 .dimensions(1536)
@@ -51,19 +50,17 @@ class SemanticCacheConfig {
     }
 
     @Bean
-    public
-    SemanticCache getSemanticCache(@Qualifier("cacheVectorStrore") VectorStore vectorStore, EmbeddingModel embeddingModel) {
+    public SemanticCache getSemanticCache(@Qualifier("cacheVectorStrore") VectorStore vectorStore, EmbeddingModel embeddingModel) {
         return DefaultSemanticCache.builder()
                 .vectorStore(vectorStore)
                 .embeddingModel(embeddingModel)
-                .similarityThreshold(0.8)
+                .similarityThreshold(0.5)
                 .build();
     }
 
     //write code for create bean of semanticCacheAdvisor
     @Bean
-    public
-    SemanticCacheAdvisor getSemanticCacheAdvisor(SemanticCache semanticCache) {
+    public SemanticCacheAdvisor getSemanticCacheAdvisor(SemanticCache semanticCache) {
         return SemanticCacheAdvisor.builder()
                 .cache(semanticCache)
                 .order(Ordered.HIGHEST_PRECEDENCE)

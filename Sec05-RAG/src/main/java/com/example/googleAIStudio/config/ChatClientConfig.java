@@ -13,7 +13,7 @@ public class ChatClientConfig {
     @Bean
     public ChatClient chatClient(ChatClient.Builder builder) {
         GoogleGenAiChatOptions.Builder options = GoogleGenAiChatOptions.builder()
-                .model("gemini-2.0-flash-001")  //gemini-2.0-flash-001
+                //.model("gemini-2.0-flash-001")  //gemini-2.0-flash-001
                 .temperature(0.9);
 
         return builder
