@@ -54,7 +54,7 @@ class SemanticCacheConfig {
         return DefaultSemanticCache.builder()
                 .vectorStore(vectorStore)
                 .embeddingModel(embeddingModel)
-                .similarityThreshold(0.5)
+                .similarityThreshold(0.8)
                 .build();
     }
 

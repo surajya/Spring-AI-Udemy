@@ -14,7 +14,7 @@ public class ChatClientConfig {
     public ChatClient chatClient(ChatClient.Builder builder) {
         GoogleGenAiChatOptions.Builder options = GoogleGenAiChatOptions.builder()
                 //.model("gemini-2.0-flash-001")  //gemini-2.0-flash-001
-                .temperature(0.9);
+                .temperature(0.8);
 
         return builder
                 .defaultOptions(options)
