@@ -21,7 +21,7 @@ public class HelpDeskTools {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HelpDeskTools.class);
 
-    @Tool(name = "createTicket", description = "Help to create a support ticket")
+    @Tool(name = "createTicket", description = "Help to create a support ticket", returnDirect = true)
     public HelpDeskTicket createTicket(@ToolParam(description = "value represent the ticketRequest") TicketRequest ticketRequest, ToolContext toolContext) {
         String username = (toolContext.getContext().get("username")).toString();
         LOGGER.info("Creating a support ticket for user {}", username);
