@@ -7,7 +7,7 @@ spring:
         api-key: ${GOOGLE_GENAI_API_KEY}
         chat:
           options:
-            model: gemini-2.5-flash
+            model: gemini-3.5-flash
     mcp:
       client:
         stdio:
@@ -18,3 +18,5 @@ logging:
     io.modelcontextprotocol: debug
     org.springframework.ai.chat.client.advisor: debug
     org.springframework.ai.mcp: debug
+
+#npx @modelcontextprotocol/inspector
