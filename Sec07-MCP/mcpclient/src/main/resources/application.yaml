@@ -18,5 +18,7 @@ logging:
     io.modelcontextprotocol: debug
     org.springframework.ai.chat.client.advisor: debug
     org.springframework.ai.mcp: debug
+server:
+  port: 8090
 
 #npx @modelcontextprotocol/inspector
