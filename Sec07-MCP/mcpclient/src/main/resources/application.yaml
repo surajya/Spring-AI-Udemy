@@ -12,13 +12,16 @@ spring:
       client:
         stdio:
           servers-configuration: classpath:mcp-server.json
+        streamable-http:
+          connections:
+            spy:
+              url: http://localhost:8090
+              endpoint: /mcp
 
 logging:
   level:
     io.modelcontextprotocol: debug
     org.springframework.ai.chat.client.advisor: debug
     org.springframework.ai.mcp: debug
-server:
-  port: 8090
 
 #npx @modelcontextprotocol/inspector
