@@ -1,5 +1,6 @@
 package com.spy.mcpclient.config;
 
+import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -15,4 +16,5 @@ public class MCPToolsConfig {
         return args -> Arrays.stream(tools.getToolCallbacks())
                 .forEach(t -> System.out.println("TOOL: " + t.getToolDefinition().name()));
     }
+
 }

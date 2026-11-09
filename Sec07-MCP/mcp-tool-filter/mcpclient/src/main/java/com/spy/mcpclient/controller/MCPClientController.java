@@ -15,17 +15,9 @@ public class MCPClientController {
 
     private final ChatClient  chatClient;
 
-    public MCPClientController(ChatClient.Builder builder, ToolCallbackProvider  toolCallbackProvider, List<McpSyncClient> mcpClients) {
-        var provider = SyncMcpToolCallbackProvider.builder()
-                .mcpClients(mcpClients)
-                .toolFilter((connectionInfo, tool) ->
-                        !tool.name().equals("issue_write")
-                                && !tool.name().equals("sub_issue_write")
-                                && !tool.name().equals("update_issue_comment"))
-                .build();
-
+    public MCPClientController(ChatClient.Builder builder, ToolCallbackProvider  toolCallbackProvider) {
         this.chatClient = builder
-                .defaultTools(provider)
+                .defaultTools(toolCallbackProvider)
                 .defaultAdvisors(new SimpleLoggerAdvisor())
                 .build();
     }
