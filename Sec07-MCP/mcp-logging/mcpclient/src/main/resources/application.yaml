@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: mcpclient
+  ai:
+    google:
+      genai:
+        api-key: ${GOOGLE_GENAI_API_KEY}
+        chat:
+          options:
+            model: gemini-3.5-flash
+    mcp:
+      client:
+        stdio:
+          servers-configuration: classpath:mcp-server.json
+        streamable-http:
+          connections:
+            spy:
+              url: http://localhost:8090
+              endpoint: /mcp
+
+logging:
+  level:
+    io.modelcontextprotocol: debug
+    org.springframework.ai.chat.client.advisor: debug
+    org.springframework.ai.mcp: debug
+
+#npx @modelcontextprotocol/inspector
