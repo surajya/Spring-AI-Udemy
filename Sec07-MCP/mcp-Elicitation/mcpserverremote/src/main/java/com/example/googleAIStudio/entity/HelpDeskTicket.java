@@ -17,18 +17,17 @@ public class HelpDeskTicket {
     @Id
     long id;
 
-    @NonNull
     String username;
 
-    @NonNull
     String issue;
 
-    @NonNull
     String status; //OPEN, IN_PROGESS, CLOSE
 
-    @NonNull
+    private String priority; // e.g., LOW, MEDIUM, HIGH, URGENT
+
+    private String contactPhone; // collected from the user via MCP elicitation
+
     LocalDateTime createdAt;
 
-    @NonNull
     LocalDateTime eta;
 }

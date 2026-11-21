@@ -17,7 +17,7 @@ spring:
             spy:
               url: http://localhost:8090
               endpoint: /mcp
-        requests-timeout: 30s
+        requests-timeout: 300s
 
 logging:
   level:

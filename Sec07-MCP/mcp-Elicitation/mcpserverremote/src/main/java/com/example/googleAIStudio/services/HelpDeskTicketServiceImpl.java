@@ -16,12 +16,13 @@ public class HelpDeskTicketServiceImpl implements HelpDeskTicketService {
     private final HelpDeskTicketRepository helpDeskTicketRepository;
 
     @Override
-    public HelpDeskTicket createHelpDeskTicket(TicketRequest ticketInput) {
-
+    public HelpDeskTicket createHelpDeskTicket(TicketRequest ticketInput, String priority, String contactPhone) {
         HelpDeskTicket ticket = HelpDeskTicket.builder()
-                .username(ticketInput.username())
                 .issue(ticketInput.issue())
+                .username(ticketInput.username())
                 .status("OPEN")
+                .priority(priority)
+                .contactPhone(contactPhone)
                 .createdAt(LocalDateTime.now())
                 .eta(LocalDateTime.now().plusDays(7))
                 .build();

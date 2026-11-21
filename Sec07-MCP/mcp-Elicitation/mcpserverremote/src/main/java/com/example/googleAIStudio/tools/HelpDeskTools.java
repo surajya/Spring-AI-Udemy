@@ -1,6 +1,7 @@
 package com.example.googleAIStudio.tools;
 
 import com.example.googleAIStudio.entity.HelpDeskTicket;
+import com.example.googleAIStudio.model.TicketContactInfo;
 import com.example.googleAIStudio.model.TicketRequest;
 import com.example.googleAIStudio.services.HelpDeskTicketServiceImpl;
 import io.modelcontextprotocol.spec.McpSchema;
@@ -11,6 +12,7 @@ import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.mcp.annotation.McpTool;
 import org.springframework.ai.mcp.annotation.McpToolParam;
 import org.springframework.ai.mcp.annotation.context.McpSyncRequestContext;
+import org.springframework.ai.mcp.annotation.context.StructuredElicitResult;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Component;
@@ -23,16 +25,55 @@ import java.util.stream.Collectors;
 public class HelpDeskTools {
 
     private final HelpDeskTicketServiceImpl service;
+    private static final String DEFAULT_PRIORITY = "MEDIUM";
+    private static final String NO_PHONE_PROVIDED = "N/A";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HelpDeskTools.class);
 
     @McpTool(name = "createTicket", description = "Create the Support Ticket")
     String createTicket(@McpToolParam(description = "Details to create a Support ticket")
-                        TicketRequest ticketRequest) {
+                        TicketRequest ticketRequest, McpSyncRequestContext ctx) {
         LOGGER.info("Creating support ticket for user: {} with details: {}", ticketRequest);
-        HelpDeskTicket savedTicket = service.createHelpDeskTicket(ticketRequest);
-        LOGGER.info("Ticket created successfully. Ticket ID: {}, Username: {}", savedTicket.getId(), savedTicket.getUsername());
-        return "Ticket #" + savedTicket.getId() + " created successfully for user " + savedTicket.getUsername();
+        String priority = DEFAULT_PRIORITY;
+        String contactPhone = NO_PHONE_PROVIDED;
+        if (ctx.elicitEnabled()) {
+            ctx.info("Asking you for a few extra details before opening this ticket...");
+            LOGGER.info("Requesting additional ticket details from the MCP client via elicitation...");
+
+            // The TicketContactInfo record is turned into the JSON 'requestedSchema' the
+            // client should fill in. Spring AI maps the client's answer back into the record.
+            StructuredElicitResult<TicketContactInfo> elicitResult = ctx.elicit(
+                    spec -> spec.message("Before we open your support ticket, please choose a priority "
+                            + "(LOW, MEDIUM, HIGH or URGENT) and share a contact phone number so our "
+                            + "team can reach you."),
+                    TicketContactInfo.class);
+
+            LOGGER.info("Elicitation finished with action: {}", elicitResult.action());
+
+            if (elicitResult.action() == McpSchema.ElicitResult.Action.ACCEPT
+                    && elicitResult.structuredContent() != null) {
+                TicketContactInfo info = elicitResult.structuredContent();
+                if (info.priority() != null && !info.priority().isBlank()) {
+                    priority = info.priority();
+                }
+                if (info.contactPhone() != null && !info.contactPhone().isBlank()) {
+                    contactPhone = info.contactPhone();
+                }
+                ctx.info("Thanks! Using priority '" + priority + "' and contact phone '" + contactPhone + "'.");
+            } else {
+                // DECLINE or CANCEL -> proceed gracefully with defaults.
+                ctx.info("No extra details provided. Opening the ticket with default priority '"
+                        + DEFAULT_PRIORITY + "'.");
+            }
+        } else {
+            LOGGER.warn("Connected MCP client does not support elicitation. Using default ticket details.");
+        }
+        HelpDeskTicket savedTicket = service.createHelpDeskTicket(ticketRequest,priority,contactPhone);
+        LOGGER.info("Ticket created successfully. Ticket ID: {}, Username: {}, Priority: {}",
+                savedTicket.getId(), savedTicket.getUsername(), savedTicket.getPriority());
+        return "Ticket #" + savedTicket.getId() + " created successfully for user "
+                + savedTicket.getUsername() + " with priority " + savedTicket.getPriority()
+                + " (contact phone: " + savedTicket.getContactPhone() + ").";
     }
 
     @McpTool(name="getTicketStatus", description = "Fetch the status of the tickets based on a given username")

@@ -7,7 +7,8 @@ import java.util.List;
 
 public interface HelpDeskTicketService {
 
-    HelpDeskTicket createHelpDeskTicket(TicketRequest ticketInput);
+    HelpDeskTicket createHelpDeskTicket(TicketRequest ticketInput,
+                                        String priority, String contactPhone);
 
     List<HelpDeskTicket> findTicketsByUsername(String username);
 }
